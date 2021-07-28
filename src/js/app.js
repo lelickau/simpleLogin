@@ -5,6 +5,7 @@ import UI from './config/ui.config';
 import { validate  } from './helpers/validate';
 import { showInputErrow, removeInputError} from './views/form';
 import { login } from './services/auth.service';
+import { notify } from './views/notifications';
 
 
 
@@ -35,9 +36,15 @@ async function onSubmit() {
         await login(inputEmail.value, inputPassword.value);
         form.reset();
         //show success notyfy
+        notify({msg: 'Login success', className: 'alert-success'});
     } catch (err) {
         //show error notyfy
+        notify({msg: 'Login faild', className: 'alert-danger'});
     }
 
     
 }
+setTimeout(() => notify({msg: 'Some notification 1', className: 'alert-danger'}), 1000);
+setTimeout(() => notify({msg: 'Some notification 2', className: 'alert-warning'}), 2000);
+setTimeout(() => notify({msg: 'Some notification 3', className: 'alert-primary'}), 3000);
+
