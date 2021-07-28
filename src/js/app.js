@@ -6,6 +6,7 @@ import { validate  } from './helpers/validate';
 import { showInputErrow, removeInputError} from './views/form';
 import { login } from './services/auth.service';
 import { notify } from './views/notifications';
+import { getNews } from './services/news.service';
 
 
 
@@ -34,6 +35,7 @@ async function onSubmit() {
 
     try {
         await login(inputEmail.value, inputPassword.value);
+        await getNews();
         form.reset();
         //show success notyfy
         notify({msg: 'Login success', className: 'alert-success'});
@@ -44,7 +46,5 @@ async function onSubmit() {
 
     
 }
-setTimeout(() => notify({msg: 'Some notification 1', className: 'alert-danger'}), 1000);
-setTimeout(() => notify({msg: 'Some notification 2', className: 'alert-warning'}), 2000);
-setTimeout(() => notify({msg: 'Some notification 3', className: 'alert-primary'}), 3000);
+
 
