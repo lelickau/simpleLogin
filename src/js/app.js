@@ -4,12 +4,13 @@ import '../css/style.css';
 import UI from './config/ui.config';
 import validate from './helpers/validate';
 import { showInputErrow, removeInputError } from './views/form';
-import { login } from './services/auth.service';
+import { login, singUp } from './services/auth.service';
 import { notify } from './views/notifications';
 import getNews from './services/news.service';
 
-const { form, inputPassword, inputEmail } = UI;
-const inputs = [inputEmail, inputPassword];
+const { form, inputPassword, inputEmail, formSingUp, singupEmail, singupPassword, singupNickname, singupFirstName, singupLastName, singupPhone, singupGenderOrientation, singupCountry, singupCity, singupDateOfBirth } = UI;
+const inputsLogin = [inputEmail, inputPassword];
+const inputsSingUp = [singupEmail, singupPassword, singupNickname, singupFirstName, singupLastName, singupPhone, singupGenderOrientation, singupCountry, singupCity, singupDateOfBirth];
 
 // tabs
 const tabsHandlerElems = document.querySelectorAll('[data-tabs-handler]');
@@ -35,8 +36,8 @@ for (const tab of tabsHandlerElems) {
 }
 
 /// handlers
-async function onSubmit() {
-	const isValidForm = inputs.every((el) => {
+async function onSubmit(input) {
+	const isValidForm = input.every((el) => {
 		const isValidInput = validate(el);
 		if (!isValidInput) {
 			showInputErrow(el);
@@ -44,7 +45,6 @@ async function onSubmit() {
 		return isValidInput;
 	});
 	if (!isValidForm) return;
-
 	try {
 		await login(inputEmail.value, inputPassword.value);
 		await getNews();
@@ -63,10 +63,43 @@ async function onSubmit() {
 	}
 }
 
+async function onSubmitSingUp(input) {
+	const isValidForm = input.every((el) => {
+		const isValidInput = validate(el);
+		if (!isValidInput) {
+			showInputErrow(el);
+		}
+		return isValidInput;
+	});
+	if (!isValidForm) return;
+	console.log(singupDateOfBirth.value);
+	try {
+		await singUp(singupEmail.value, singupPassword.value, singupNickname.value, singupFirstName.value, singupLastName.value, singupPhone.value, singupGenderOrientation.value, singupCountry.value, singupCity.value, singupDateOfBirth.value);
+		// await getNews();
+		formSingUp.reset();
+		// show success notyfy
+		notify({
+			msg: 'Login success',
+			className: 'alert-success',
+		});
+	} catch (err) {
+		// show error notyfy
+		notify({
+			msg: 'Login faild',
+			className: 'alert-danger',
+		});
+	}
+}
+
 // event
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
-	onSubmit();
+	onSubmit(inputsLogin);
 });
 
-inputs.forEach((el) => el.addEventListener('focus', () => removeInputError(el)));
+formSingUp.addEventListener('submit', (e) => {
+	e.preventDefault();
+	onSubmitSingUp(inputsSingUp);
+});
+
+inputsLogin.forEach((el) => el.addEventListener('focus', () => removeInputError(el)));

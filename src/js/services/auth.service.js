@@ -22,34 +22,23 @@ export async function login(email, password) {
 	}
 }
 
-export async function singUp({
-	email,
-	password,
-	nickname,
-	first_name,
-	last_name,
-	phone,
-	gender_orientation,
-	city,
-	country,
-	date_of_birth_day,
-	date_of_birth_month,
-	date_of_birth_year,
-}) {
+// 852963741
+export async function singUp(singupEmail, singupPassword, singupNickname, singupFirstName, singupLastName, singupPhone, singupGenderOrientation, singupCountry, singupCity, singupDateOfBirth) {
+	const birthDay = singupDateOfBirth.split('.');
 	try {
 		const response = await axios.post('/auth/signup', JSON.stringify({
-			email,
-			password,
-			nickname,
-			first_name,
-			last_name,
-			phone,
-			gender_orientation,
-			city,
-			country,
-			date_of_birth_day,
-			date_of_birth_month,
-			date_of_birth_year,
+			email: singupEmail,
+			password: singupPassword,
+			nickname: singupNickname,
+			first_name: singupFirstName,
+			last_name: singupLastName,
+			phone: singupPhone,
+			gender_orientation: singupGenderOrientation,
+			city: singupCountry,
+			country: singupCity,
+			date_of_birth_day: birthDay[0],
+			date_of_birth_month: birthDay[1],
+			date_of_birth_year: birthDay[2],
 		}));
 		console.log(response);
 		return response;
